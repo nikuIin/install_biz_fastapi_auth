@@ -13,6 +13,7 @@ from fastapi import (
 )
 from pydantic import EmailStr
 from starlette.status import (
+    HTTP_204_NO_CONTENT,
     HTTP_401_UNAUTHORIZED,
     HTTP_404_NOT_FOUND,
     HTTP_409_CONFLICT,
@@ -501,6 +502,7 @@ async def verify_email_code(
 
 @router.post(
     "/exit",
+    status_code=HTTP_204_NO_CONTENT,
     summary="Logout / Close User Session",
     description=(
         "Invalidates the current refresh token associated with the authenticated session"
