@@ -12,7 +12,7 @@ RUN apt-get upgrade && apt-get update && apt-get install -y netcat-traditional
 WORKDIR /app
 
 # copy info about project dependencies
-COPY uv.lock pyproject.toml .python-version /app
+COPY uv.lock pyproject.toml .python-version /app/
 
 # install dependencies only, excluding dev dependencies
 RUN uv sync --frozen --no-dev --no-install-project
