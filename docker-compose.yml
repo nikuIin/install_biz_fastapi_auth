@@ -1,0 +1,73 @@
+services:
+  db:
+    image: postgres-fastapi-base-auth-project:1.0
+    build:
+      context: postgres_image/
+    container_name: postgres-fastapi-base-auth-cnt
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${DB_USER} $${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - pgdata-fastapi-auth:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - base-fastapi-auth-network
+  backend:
+    image: backend-fastapi-base-app:1.0
+    build:
+      context: ./
+    container_name: backend-fastapi-base-auth-cnt
+    volumes:
+      - ./logs/:/app/logs/
+    env_file:
+      - .env
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    networks:
+      - base-fastapi-auth-network
+  redis:
+    image: redis:8.2-rc1-bookworm
+    container_name: redis-fastapi-base-auth-app
+    platform: linux/amd64
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    ports:
+      - "6379:6379"
+    networks:
+      - base-fastapi-auth-network
+  nginx:
+    image: nginx-fastapi-base-app:1.0
+    build:
+      context: nginx/
+    container_name: nginx-fastapi-base-auth-cnt
+    volumes:
+      - ./static:/var/www/static
+    depends_on:
+      - db
+      - backend
+    ports:
+      - "80:80"
+    networks:
+      - base-fastapi-auth-network
+
+networks:
+  base-fastapi-auth-network:
+
+volumes:
+  pgdata-fastapi-auth:
