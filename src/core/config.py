@@ -34,6 +34,9 @@ class AppSettings(ModelConfig):
     app_mode: ModeEnum = Field(
         default=ModeEnum.PROD, validation_alias="APP_MODE"
     )
+    current_api_version: str = Field(
+        default="v1", validation_alias="CURRENT_API_VERSION"
+    )
 
 
 class HostSettings(ModelConfig):
