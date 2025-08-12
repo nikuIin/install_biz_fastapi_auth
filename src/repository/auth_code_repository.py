@@ -11,11 +11,12 @@ from core.general_constants import (
 )
 from core.logger.logger import get_configure_logger
 from db.dependencies.redis_helper import redis_helper
+from repository.abc.auth_code_repository_abc import AuthCodeRepositoryABC
 
 logger = get_configure_logger(Path(__file__).stem)
 
 
-class AuthCodeRepository:
+class AuthCodeRepository(AuthCodeRepositoryABC):
     def __init__(self, redis: Redis):
         """Initialize the CodeRepository with a Redis client.
 
