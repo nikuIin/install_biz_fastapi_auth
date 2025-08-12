@@ -37,6 +37,9 @@ from repository.user_repository import (
     UserRepository,
     user_repository_dependency,
 )
+from services.abc.email_verification_service_abc import (
+    EmailVerificationServiceABC,
+)
 
 logger = get_configure_logger(Path(__file__).stem)
 
@@ -48,7 +51,7 @@ MAX_USER_AUTH_ATTEMPTS_PER_TIME = 5
 MAX_EMAIL_AUTH_ATTEMPTS_PER_TIME = 5
 
 
-class EmailVerificationService:
+class EmailVerificationService(EmailVerificationServiceABC):
     def __init__(
         self,
         auth_code_repository: AuthCodeRepository,
