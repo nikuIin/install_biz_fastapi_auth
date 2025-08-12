@@ -10,9 +10,7 @@ class Statement:
         description: str,
         statement: Any,
         data: dict,
-        check_query: Callable,
     ):
         self.description = description
         self.statement = statement
         self.data = data
-        self.check_query = check_query
